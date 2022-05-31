@@ -1,0 +1,24 @@
+- name: Configuring new cluster
+  hosts: rpis
+  tasks:
+    - name: Update package lists
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: Upgrade packages
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Expand filesystem
+      become: yes
+      shell: raspi-config --expand-rootfs
+
+    - name: Reboot
+      become: true
+      reboot:
+        reboot_timeout: 200
+

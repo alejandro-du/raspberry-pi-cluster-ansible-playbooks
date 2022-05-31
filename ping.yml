@@ -1,0 +1,4 @@
+- name: Ping the Pies
+  hosts: rpis
+  tasks:
+  - action: ping
