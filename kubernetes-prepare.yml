@@ -1,0 +1,24 @@
+- name: Prepare for Kubernetes
+  hosts: rpis
+  gather_facts: no
+  tasks:
+    - name: Enable cgroups
+      become: yes
+      shell: sh -c "echo ' cgroup_enable=memory cgroup_memory=1' >> /boot/cmdline.txt"
+
+    - name: Configure host name
+      become: yes
+      shell: sh -c "echo '$(hostname).local' > /etc/hostname"
+
+    - shell: export LC_ALL=C.UTF-8
+    - shell: export LANG=C.UTF-8
+    - shell: echo "LC_ALL=en_US.UTF-8" | sudo tee -a /etc/environment
+    - shell: echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
+    - shell: echo "LANG=en_US.UTF-8" | sudo tee -a /etc/locale.conf
+
+    - name: Configure locale
+      become: yes
+      shell: locale-gen en_US.UTF-8
+
+    - name: Reboot
+      include: reboot.yml

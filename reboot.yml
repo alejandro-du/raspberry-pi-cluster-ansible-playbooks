@@ -1,0 +1,9 @@
+- name: Reboot devices
+  hosts: rpis
+  gather_facts: no
+  tasks:
+    - name: Reboot
+      become: yes
+      ignore_errors: yes
+      ignore_unreachable: yes
+      shell: reboot

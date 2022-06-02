@@ -1,0 +1,23 @@
+- name: Install Kubernetes (MicroK8s)
+  hosts: rpis
+  gather_facts: no
+  tasks:
+    - name: Install snap
+      become: yes
+      shell: apt install -y snapd
+
+    - name: Install core
+      become: yes
+      shell: snap install core
+
+    - name: Install MicroK8s
+      become: yes
+      shell: snap install microk8s --classic
+
+    - name: Join gruop
+      become: yes
+      shell: usermod -a -G microk8s pi
+
+    - name: Set owner
+      become: yes
+      shell: chown -f -R pi ~/.kube
