@@ -1,6 +1,5 @@
 - name: Prepare for Kubernetes
   hosts: rpis
-  gather_facts: no
   tasks:
     - name: Enable cgroups
       become: yes
@@ -19,6 +18,4 @@
     - name: Configure locale
       become: yes
       shell: locale-gen en_US.UTF-8
-
-    - name: Reboot
-      include: reboot.yml
+      

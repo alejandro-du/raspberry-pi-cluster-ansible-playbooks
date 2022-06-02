@@ -1,6 +1,5 @@
 - name: Install Kubernetes (MicroK8s)
   hosts: rpis
-  gather_facts: no
   tasks:
     - name: Install snap
       become: yes

@@ -1,6 +1,5 @@
 - name: Reboot devices
   hosts: rpis
-  gather_facts: no
   tasks:
     - name: Reboot
       become: yes
