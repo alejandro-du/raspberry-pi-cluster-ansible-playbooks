@@ -21,8 +21,9 @@ Change the target group name (the default is `rpis`) in the **.yml** files befor
 * **ping.yml**: Pings all the machines
 * **new-cluster.yml**: Updates the machines and expands their filesystem
 * **shutdown.yml**: Shutdown all the machines
-* **kubernetes-prepare.yml**: Prepares for Kubernetes installation
-* **kubernetes-install.yml**: Installs Kubernetes (MicroK8s)
+* **microk8s-prepare.yml**: Prepares for Kubernetes (Microk8s) installation
+* **microk8s-install.yml**: Installs Kubernetes (MicroK8s)
+* **microk8s-workers.yml**: Makes workers join the Kubernetes (Microk8s) cluster
 
 ## Related articles
 
