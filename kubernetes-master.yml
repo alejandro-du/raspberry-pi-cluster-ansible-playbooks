@@ -1,0 +1,5 @@
+- name: Add the master node to the Kubernetes cluster
+  hosts: k8s_masters
+  tasks:
+    - name: Add master node
+      shell: /snap/bin/microk8s.add-node --token-ttl 300 --token {{ token }}

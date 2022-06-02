@@ -15,8 +15,8 @@
 
     - name: Join gruop
       become: yes
-      shell: usermod -a -G microk8s pi
+      shell: /usr/sbin/usermod -a -G microk8s pi
 
     - name: Set owner
       become: yes
-      shell: chown -f -R pi ~/.kube
+      shell: /usr/bin/chown -f -R pi ~/.kube
