@@ -1,6 +1,0 @@
-- name: Make workers join the Kubernetes cluster
-  hosts: k8s_workers
-  gather_facts: no
-  tasks:
-    - name: Join cluster
-      shell: "/snap/bin/microk8s join --skip-verify {{ master_location }}"
