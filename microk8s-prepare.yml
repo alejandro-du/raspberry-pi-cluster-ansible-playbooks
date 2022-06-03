@@ -1,5 +1,5 @@
 - name: Prepare for Kubernetes
-  hosts: rpis
+  hosts: rpies
   tasks:
     - name: Enable cgroups
       become: yes

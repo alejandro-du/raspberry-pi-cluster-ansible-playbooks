@@ -1,5 +1,5 @@
 - name: Configuring new cluster
-  hosts: rpis
+  hosts: rpies
   tasks:
     - name: Update package lists
       become: yes

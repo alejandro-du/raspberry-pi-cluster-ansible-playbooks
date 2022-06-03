@@ -1,5 +1,5 @@
 - name: Install Kubernetes (MicroK8s)
-  hosts: rpis
+  hosts: rpies
   tasks:
     - name: Install snap
       become: yes

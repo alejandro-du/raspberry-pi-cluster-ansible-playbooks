@@ -1,5 +1,5 @@
 - name: Shutdown devices
-  hosts: rpis
+  hosts: rpies
   gather_facts: no
   tasks:
     - name: Shutdown

@@ -14,7 +14,7 @@ ansible-playbook some-playbook.yml --ask-pass
 
 ## Configuring
 
-Change the target group name (the default is `rpis`) in the **.yml** files before running a playbook if needed.
+Change the target group name (the default is `rpies`) in the **.yml** files before running a playbook if needed.
 
 ## Available playbooks
 

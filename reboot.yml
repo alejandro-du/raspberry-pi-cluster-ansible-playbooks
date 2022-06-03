@@ -1,5 +1,5 @@
 - name: Reboot devices
-  hosts: rpis
+  hosts: rpies
   tasks:
     - name: Reboot
       become: yes
