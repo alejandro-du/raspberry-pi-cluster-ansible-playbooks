@@ -23,6 +23,8 @@ Change the target group name (the default is `rpies`) in the **.yml** files befo
 * **shutdown.yml**: Shuts down all the machines
 * **microk8s-prepare.yml**: Prepares for Kubernetes (Microk8s) installation
 * **microk8s-install.yml**: Installs Kubernetes (MicroK8s)
+* **microk8s-master.yml**: Generates join tokens in the master node
+* **microk8s-workers.yml**: Makes workers join the cluster
 
 ## Related articles
 
