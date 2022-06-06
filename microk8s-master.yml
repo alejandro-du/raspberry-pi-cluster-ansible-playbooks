@@ -1,0 +1,6 @@
+- name: Configure master node
+  hosts: master
+  tasks:
+    - name: Generate token for {{ item }}
+      shell: /snap/bin/microk8s.add-node --token-ttl 300 --token {{ token }}{{ item }}
+      loop: "{{ groups[ 'workers' ] }}"
