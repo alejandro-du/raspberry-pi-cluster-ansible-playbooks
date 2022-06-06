@@ -29,4 +29,4 @@ Change the target group name (the default is `rpies`) in the **.yml** files befo
 ## Related articles
 
 * [Setting Up a Dedicated Database Server on Raspberry Pi](https://dzone.com/articles/set-up-a-dedicated-database-server-on-raspberry)
-* [Building a 24-Core Raspberry Pi Cluster From Scratch](https://dzone.com/articles/building-a-24-core-raspberry-pi-cluster-from-scrat)
+* [Building a 32-Core Raspberry Pi Cluster From Scratch](https://dzone.com/articles/building-a-24-core-raspberry-pi-cluster-from-scrat)
