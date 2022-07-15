@@ -1,7 +1,5 @@
 # Ansible playbooks to manage Raspberry Pi clusters
 
-_(this is WIP)_
-
 This repository contains a set of Ansible playbooks that help to set up and manage a Raspberry Pi cluster.
 
 ## How to run?
