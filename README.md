@@ -4,7 +4,30 @@ This repository contains a set of Ansible playbooks that help to set up and mana
 
 ## How to run?
 
-Install Ansible on a control node and define an inventory. Run a playbook as follows:
+Install Ansible on a control node and define an inventory (**/etc/ansible/hosts**). For example:
+
+```
+# Raspberry Pi 8-node cluster
+[rpies]
+rpi[01:08].local	ansible_user=pi
+
+[master]
+rpi01.local	ansible_user=pi		token=xxxxxxyyyyyyyyyy
+
+[workers]
+#rpi02.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxx
+rpi03.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi03.local
+rpi04.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi04.local
+rpi05.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi05.local
+rpi06.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi06.local
+rpi07.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi07.local
+rpi08.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi08.local
+
+[workers:vars]
+master=rpi01.local:25000
+```
+
+Run a playbook as follows:
 
 ```bash
 ansible-playbook some-playbook.yml --ask-pass
