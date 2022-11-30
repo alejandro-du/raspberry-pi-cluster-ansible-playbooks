@@ -15,7 +15,7 @@ rpi[01:08].local	ansible_user=pi
 rpi01.local	ansible_user=pi		token=xxxxxxyyyyyyyyyy
 
 [workers]
-#rpi02.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxx
+rpi02.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi02.local
 rpi03.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi03.local
 rpi04.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi04.local
 rpi05.local	ansible_user=pi		token=zzzzzzzzzxxxxxxxxxrpi05.local
