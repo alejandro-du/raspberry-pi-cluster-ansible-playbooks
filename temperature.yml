@@ -4,6 +4,5 @@
   tasks:
     - name: Print temperature
       shell: echo "$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000)) °C"
-      #shell: cat /sys/class/thermal/thermal_zone0/temp
       register: output
     - debug: var=output.stdout
