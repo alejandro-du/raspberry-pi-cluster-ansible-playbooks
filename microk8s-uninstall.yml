@@ -1,0 +1,6 @@
+- name: Uninstall Kubernetes (MicroK8s)
+  hosts: rpies
+  tasks:
+    - name: Uninstall MicroK8s
+      become: yes
+      shell: snap remove microk8s
