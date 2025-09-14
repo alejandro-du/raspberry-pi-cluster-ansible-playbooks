@@ -1,5 +1,5 @@
 - name: Uninstall Kubernetes (MicroK8s)
-  hosts: rpies
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
   tasks:
     - name: Uninstall MicroK8s
       become: yes

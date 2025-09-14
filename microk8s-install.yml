@@ -1,5 +1,5 @@
 - name: Install Kubernetes (MicroK8s)
-  hosts: rpies
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
   tasks:
     - name: Install snap
       become: yes

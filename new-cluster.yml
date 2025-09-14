@@ -1,5 +1,5 @@
 - name: Configuring new cluster
-  hosts: rpies
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
   tasks:
     - name: Update package lists
       become: yes
@@ -21,4 +21,3 @@
       become: true
       reboot:
         reboot_timeout: 200
-

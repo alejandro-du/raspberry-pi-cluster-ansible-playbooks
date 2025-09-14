@@ -1,5 +1,5 @@
 - name: Prepare for Kubernetes
-  hosts: rpies
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
   tasks:
     - name: Enable cgroups
       become: yes

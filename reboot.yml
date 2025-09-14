@@ -1,5 +1,5 @@
 - name: Reboot devices
-  hosts: rpies
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
   tasks:
     - name: Reboot
       become: yes
