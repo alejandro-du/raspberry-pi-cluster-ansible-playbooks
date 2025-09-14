@@ -1,5 +1,0 @@
-- name: Ping the Pies
-  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
-  gather_facts: no
-  tasks:
-  - action: ping
