@@ -17,6 +17,13 @@
       become: yes
       shell: raspi-config --expand-rootfs
 
+    - name: Set heartbeat LED trigger
+      become: yes
+      lineinfile:
+        path: /boot/config.txt
+        line: "dtparam=act_led_trigger=heartbeat"
+        state: present
+
     - name: Reboot
       become: true
       reboot:
