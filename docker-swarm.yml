@@ -1,0 +1,34 @@
+- hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
+  become: true
+  tasks:
+    - name: Determine swarm status
+      command: docker info --format {% raw %}'{{.Swarm.LocalNodeState}}'{% endraw %}
+      register: swarm_status
+      changed_when: false
+
+    - name: Configure master node
+      shell: |
+        if [ "$(docker info --format '{% raw %}{{.Swarm.ControlAvailable}}{% endraw %}')" != "true" ]; then
+          docker swarm leave --force || true
+          docker swarm init --advertise-addr {{ ansible_facts['default_ipv4']['address'] }}
+        fi
+      when: (master | default(false)) | bool
+
+    - name: Retrieve worker token
+      command: docker swarm join-token -q worker
+      register: worker_token
+      changed_when: false
+      when: (master | default(false)) | bool
+
+    - name: Join workers
+      shell: |
+        docker swarm join --token {{ hostvars[item].worker_token.stdout }} {{ hostvars[item]['ansible_facts']['default_ipv4']['address'] }} || \
+        (docker swarm leave --force && \
+        docker swarm join --token {{ hostvars[item].worker_token.stdout }} {{ hostvars[item]['ansible_facts']['default_ipv4']['address'] }})
+      when:
+        - not ((master | default(false)) | bool)
+        - (hostvars[item].master | default(false)) | bool
+        - hostvars[item].worker_token is defined
+      register: worker_join_result
+      changed_when: worker_join_result.rc == 0
+      loop: "{{ ansible_play_hosts }}"

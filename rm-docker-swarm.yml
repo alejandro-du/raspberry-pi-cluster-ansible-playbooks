@@ -1,0 +1,21 @@
+- hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
+  become: true
+  tasks:
+    - name: Check swarm state
+      shell: docker info --format {% raw %}'{{.Swarm.LocalNodeState}}'{% endraw %}
+      register: swarm_state
+      changed_when: false
+
+    - name: Leave swarm (workers)
+      shell: docker swarm leave
+      when:
+        - not ((master | default(false)) | bool)
+        - swarm_state.stdout | trim == "active"
+      ignore_errors: true
+
+    - name: Leave swarm (master)
+      shell: docker swarm leave --force
+      when:
+        - (master | default(false)) | bool
+        - swarm_state.stdout | trim == "active"
+      ignore_errors: true
