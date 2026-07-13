@@ -1,0 +1,10 @@
+- name: Install Podman
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpies', true) }}"
+  tasks:
+    - name: Update apt cache and install Podman
+      become: yes
+      apt:
+        name:
+          - podman
+        state: present
+        update_cache: yes
