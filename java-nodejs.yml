@@ -1,0 +1,125 @@
+---
+- name: Provision Raspberry Pi development machines with Java and Node.js
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpiesz', true) }}"
+  serial: 4
+  become: true
+
+  vars:
+    sdkman_dir: "/home/pi/.sdkman"
+    sdkman_user: "pi"
+    java_version: "25-graalce"
+
+  tasks:
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install base development packages
+      ansible.builtin.apt:
+        name:
+          - git
+          - curl
+          - unzip
+          - zip
+          - wget
+          - gnupg
+          - ca-certificates
+        state: present
+
+    - name: Install SDKMAN!
+      become: false
+      ansible.builtin.shell: |
+        curl -fsSL https://get.sdkman.io | bash
+      args:
+        executable: /bin/bash
+        creates: "{{ sdkman_dir }}/bin/sdkman-init.sh"
+      environment:
+        HOME: "/home/pi"
+      register: sdkman_install
+      retries: 5
+      delay: 30
+      until: sdkman_install.rc == 0
+
+    - name: Install Java 25 GraalCE using SDKMAN!
+      become: false
+      ansible.builtin.shell: |
+        source "{{ sdkman_dir }}/bin/sdkman-init.sh"
+        sdk install java {{ java_version }} -y
+      args:
+        executable: /bin/bash
+        creates: "{{ sdkman_dir }}/candidates/java/{{ java_version }}"
+      environment:
+        HOME: "/home/pi"
+        SDKMAN_DIR: "{{ sdkman_dir }}"
+
+    - name: Set Java 25 GraalCE as default
+      become: false
+      ansible.builtin.shell: |
+        source "{{ sdkman_dir }}/bin/sdkman-init.sh"
+        sdk default java {{ java_version }}
+      args:
+        executable: /bin/bash
+      environment:
+        HOME: "/home/pi"
+        SDKMAN_DIR: "{{ sdkman_dir }}"
+
+    - name: Install latest Maven using SDKMAN!
+      become: false
+      ansible.builtin.shell: |
+        source "{{ sdkman_dir }}/bin/sdkman-init.sh"
+        sdk install maven
+      args:
+        executable: /bin/bash
+        creates: "{{ sdkman_dir }}/candidates/maven"
+      environment:
+        HOME: "/home/pi"
+        SDKMAN_DIR: "{{ sdkman_dir }}"
+
+    - name: Install NodeSource repository
+      ansible.builtin.shell: |
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+      args:
+        executable: /bin/bash
+        creates: /etc/apt/sources.list.d/nodesource.list
+
+    - name: Update apt cache after adding NodeSource
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Node.js and npm
+      ansible.builtin.apt:
+        name:
+          - nodejs
+        state: present
+
+    - name: Verify installed development tools
+      become: false
+      ansible.builtin.shell: |
+        source "{{ sdkman_dir }}/bin/sdkman-init.sh"
+
+        echo "Git:"
+        git --version
+
+        echo "Java:"
+        java -version 2>&1 | head -n 1
+
+        echo "Maven:"
+        mvn -version | head -n 1
+
+        echo "Node:"
+        node --version
+
+        echo "npm:"
+        npm --version
+      args:
+        executable: /bin/bash
+      environment:
+        HOME: "/home/pi"
+        SDKMAN_DIR: "{{ sdkman_dir }}"
+      register: dev_tools_versions
+
+    - name: Display installed versions
+      ansible.builtin.debug:
+        var: dev_tools_versions.stdout_lines
