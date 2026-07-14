@@ -1,0 +1,69 @@
+---
+- name: Remove Java and Node.js development setup from Raspberry Pi machines
+  hosts: "{{ lookup('env', 'TARGET_GROUP_NAME') | default('rpiesz', true) }}"
+  serial: 4
+  become: true
+
+  vars:
+    sdkman_dir: "/home/pi/.sdkman"
+    sdkman_user: "pi"
+
+  tasks:
+
+    - name: Remove Node.js and npm
+      ansible.builtin.apt:
+        name:
+          - nodejs
+        state: absent
+        purge: true
+
+    - name: Remove NodeSource repository list
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/nodesource.list
+        state: absent
+
+    - name: Remove NodeSource keyring
+      ansible.builtin.file:
+        path: /etc/apt/keyrings/nodesource.gpg
+        state: absent
+
+    - name: Remove NodeSource legacy apt key file (if present)
+      ansible.builtin.file:
+        path: /usr/share/keyrings/nodesource.gpg
+        state: absent
+
+    - name: Remove SDKMAN! directory (Java, Maven, and SDKMAN! itself)
+      ansible.builtin.file:
+        path: "{{ sdkman_dir }}"
+        state: absent
+
+    - name: Remove SDKMAN! shell init lines from .bashrc
+      ansible.builtin.blockinfile:
+        path: "/home/pi/.bashrc"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - SDKMAN"
+        state: absent
+
+    - name: Check for SDKMAN! init snippet not wrapped in markers
+      ansible.builtin.lineinfile:
+        path: "/home/pi/.bashrc"
+        regexp: 'sdkman-init\.sh'
+        state: absent
+
+    - name: Autoremove unused dependencies
+      ansible.builtin.apt:
+        autoremove: true
+
+    - name: Verify removal
+      become: false
+      ansible.builtin.shell: |
+        echo "Node:"; command -v node || echo "not found"
+        echo "npm:"; command -v npm || echo "not found"
+        echo "SDKMAN dir:"; [ -d "{{ sdkman_dir }}" ] && echo "still present" || echo "removed"
+      args:
+        executable: /bin/bash
+      register: removal_check
+      changed_when: false
+
+    - name: Display verification results
+      ansible.builtin.debug:
+        var: removal_check.stdout_lines
